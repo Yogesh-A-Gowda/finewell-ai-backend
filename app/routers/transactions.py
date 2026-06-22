@@ -88,14 +88,16 @@ def delete_transaction(
 
 def _check_and_create_alert(db: Session, user: models.User):
     from app.services.prediction import calculate_penalty_risk
+    from datetime import timedelta
     risk, reason = calculate_penalty_risk(user)
     if risk in ("High", "Medium"):
+        cutoff = datetime.utcnow() - timedelta(hours=24)
         existing = (
             db.query(models.Alert)
             .filter(
                 models.Alert.user_id == user.id,
                 models.Alert.alert_type == "penalty_risk",
-                models.Alert.is_read == False,
+                models.Alert.created_at >= cutoff,  # any alert within 24h, read or not
             )
             .first()
         )
