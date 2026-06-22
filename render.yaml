@@ -8,6 +8,6 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: GEMINI_API_KEY
-        sync: false
+        sync: false          # you paste this manually in the Render dashboard
       - key: DATABASE_URL
-        value: sqlite:///./finwell.db
+        sync: false          # paste your Neon/Supabase/Aiven URL here
